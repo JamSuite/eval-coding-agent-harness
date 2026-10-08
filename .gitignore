@@ -21,8 +21,10 @@ node_modules/
 
 # ---- installed skills ----
 # Skills installed into a host's project-scope directory are build output. The
-# sample skill lives only under test fixtures.
-.claude/skills/
+# sample skill lives only under test fixtures. The one exception is beads-sdd,
+# the project skill for the session that builds this repo (see CLAUDE.md).
+.claude/skills/*
+!.claude/skills/beads-sdd/
 .agents/skills/
 .codex/skills/
 .opencode/skills/

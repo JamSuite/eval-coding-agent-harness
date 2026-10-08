@@ -89,6 +89,12 @@ curl -fsSL https://raw.githubusercontent.com/shellspec/shellspec/master/install.
 sh "$shellspec_installer" --yes -p "$HOME/.local" "$SHELLSPEC_VERSION"
 rm -f "$shellspec_installer"
 
+# ---- beads_rust (br) ----
+#
+# The project's tracker. Pinned and checksum-checked in its own script so that
+# it can also be installed into a running container without a rebuild.
+sh .devcontainer/install-br.sh
+
 # ---- project dependencies ----
 #
 # promptfoo, prettier and the SDKs are pinned in package.json. The Codex CLI

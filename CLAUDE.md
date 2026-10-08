@@ -5,8 +5,8 @@ only in a skill's body, then reports how much the output moved, with its uncerta
 rival explanations ruled out. promptfoo is the engine; control logic stays independent of it. The
 harness ships no skill; a sample skill exists only as a test fixture.
 
-`PROMPTS.md` holds the build plan, the shared context (hosts, reference repository, rivals) and
-the status tracker. Read its Shared context before any prompt.
+`PROMPTS.md` holds the build plan and the shared context (hosts, reference repository, rivals,
+tracking). Read its Shared context before any prompt. Status lives only in beads (`br`).
 
 ## Rules
 
@@ -16,14 +16,26 @@ the status tracker. Read its Shared context before any prompt.
 - **Test first.** Write the test, watch it fail, then implement. Every control gets a test that
   seeds the breakage it detects. Unit tests never call a model or need a login.
 - **Spec first.** Write no harness code without an approved spec under `docs/specs/`.
-- **Done.** A task is done when the quality gate passes, the work is committed, and the status
-  table in `PROMPTS.md` is updated. P1 creates the gate and names its command here.
-- **Scope.** Do what the prompt asks. Record anything else under Open Questions in the relevant
-  spec, or as a Note in the status table.
+- **Done.** A prompt is done when the quality gate passes, the work is committed, and its bead is
+  closed with the commit hash. P1 creates the gate and names its command here.
+- **Scope.** Do what the prompt asks. Record anything else as a bead labelled `spec-NN`, or
+  `harness` if it belongs to no spec.
 - **Writing.** Docs follow `docs/arch/writing-style.md` once it exists: plain, specific,
   checkable, with each fact stated once.
 - **Reference repository.** `/workspaces/coding-agent-skills-tdd` is read-only. Build from it; do
   not copy it.
+
+## Tracking
+
+beads_rust (`br`) is the only tracker; there is no status table. The rules are in `PROMPTS.md` →
+Shared context → Tracking, and the commands for each rule are in the project skill
+`.claude/skills/beads-sdd/SKILL.md`. In short:
+
+- Next work: `br ready --label prompt`, then the prompt that comes first in PROMPTS.md's order.
+- A prompt's bead goes in progress when it starts, closed with the commit hash when done, or
+  blocked with the reason.
+- An approved spec's tasks become beads labelled `spec-NN` under the BUILD-NN bead.
+- Commit `.beads/issues.jsonl` with the work it describes; never the database.
 
 ## Run workspaces never inherit this repository's instructions
 
