@@ -10,8 +10,8 @@
 - **Test first.** Write the test, watch it fail, then implement. Every control gets a test that
   seeds the breakage it detects. Unit tests never call a model or need a login.
 - **Spec first.** Write no harness code without an approved spec under `docs/specs/`.
-- **Done.** The quality gate passes, the work is committed, and its bead is closed with the
-  commit hash. P1 creates the gate and names its command here.
+- **Done.** The quality gate, `make check`, passes; the work is committed; and its bead is closed
+  with the commit hash.
 - **Scope.** Do what the prompt asks; record anything else as a `spec-NN` or `harness` bead.
 - **Reference repository.** `/workspaces/coding-agent-skills-tdd` is read-only. Build from it; do
   not copy it.

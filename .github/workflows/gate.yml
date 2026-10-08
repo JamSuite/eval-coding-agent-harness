@@ -1,0 +1,43 @@
+name: gate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# promptfoo and the host SDKs ship telemetry that is on by default. The gate
+# never runs them, but npm ci installs them.
+env:
+  DISABLE_TELEMETRY: "1"
+  DO_NOT_TRACK: "1"
+  PROMPTFOO_DISABLE_TELEMETRY: "1"
+
+jobs:
+  check:
+    # Pinned rather than ubuntu-latest so that apt's shellcheck and shfmt
+    # change only when this line does.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      # The same major as the devcontainer's node feature.
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # The devcontainer's own installers, so CI and the container cannot
+      # drift apart. No host CLI is installed: the gate calls no model.
+      - name: Install the shell toolchain and ShellSpec
+        run: |
+          sh .devcontainer/install/shell_toolchain.sh
+          sh .devcontainer/install/shellspec.sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - run: make check

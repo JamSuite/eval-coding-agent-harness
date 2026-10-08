@@ -34,8 +34,8 @@
         // config that the harness must be able to exclude.
         "source=opencode-data-${devcontainerId},target=/home/vscode/.local/share/opencode,type=volume",
         // Antigravity CLI: config lives in ~/.gemini/antigravity-cli/.
-        // Credentials go to the OS keyring, which a container lacks; P1 checks
-        // whether the login survives a rebuild.
+        // A container has no OS keyring, yet the login still survived the
+        // rebuild of 2026-10-08, so this volume is enough.
         "source=antigravity-config-${devcontainerId},target=/home/vscode/.gemini,type=volume",
         // Muse Code: `muse login` writes ~/.config/muse/auth.json.
         "source=muse-config-${devcontainerId},target=/home/vscode/.config/muse,type=volume",
