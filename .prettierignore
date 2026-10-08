@@ -8,3 +8,6 @@ package-lock.json
 # Shell is formatted by shfmt, not prettier.
 *.sh
 .shellspec
+
+# Verbatim from apache.org; must not be reformatted.
+LICENSE.md

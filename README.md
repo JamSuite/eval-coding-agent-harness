@@ -41,3 +41,7 @@ offline with `shellspec`.
   serves the installer gzipped without saying so; `.devcontainer/install/lib.sh` decompresses it.
   Antigravity keeps its login in the OS keyring, and the container has none, so whether the login
   survives a rebuild is still unproven.
+
+## License
+
+[Apache License 2.0](LICENSE.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) to contribute.
