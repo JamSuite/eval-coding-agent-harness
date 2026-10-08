@@ -90,7 +90,6 @@ Describe 'install scripts skip a tool that is already present'
     Parameters
         beads_rust.sh br 'br 0.7.4'
         shellspec.sh shellspec '0.28.1'
-        codex.sh codex 'codex-cli 0.162.0'
         antigravity.sh agy 'agy 1.0.0'
         muse.sh muse 'Muse Code 1.4.4'
     End
@@ -159,17 +158,70 @@ Describe 'a failed download'
     End
 End
 
+codex_target() {
+    case $(uname -m) in
+        aarch64 | arm64) echo aarch64-unknown-linux-musl ;;
+        *) echo x86_64-unknown-linux-musl ;;
+    esac
+}
+
+# Lays out a package release reporting $1, as codex.sh would unpack it, with
+# ~/.local/bin/codex linked to its entrypoint.
+stub_codex_package() {
+    release="$HOME/.local/share/codex/$1-$(codex_target)"
+    mkdir -p "$release/bin"
+    printf '{"version": "%s"}\n' "$1" > "$release/codex-package.json"
+    printf '#!/bin/sh\necho "codex-cli %s"\n' "$1" > "$release/bin/codex"
+    chmod +x "$release/bin/codex"
+    ln -sf "$release/bin/codex" "$HOME/.local/bin/codex"
+}
+
+Describe 'codex.sh installs the full package'
+    It 'makes no download when the pinned package is linked'
+        stub_codex_package 0.162.0
+        When run sh "$INSTALL/codex.sh"
+        The status should be success
+        The result of function curl_calls should equal 0
+    End
+
+    It 'downloads when the package is linked at another version'
+        stub_codex_package 0.156.1
+        CURL_EXIT=22
+        When run sh "$INSTALL/codex.sh"
+        The status should be failure
+        The stderr should be present
+        The result of function curl_calls should not equal 0
+    End
+
+    # The bare binary reports the pinned version, but the interactive TUI
+    # refuses to start without the package around it.
+    It 'downloads the package over a bare binary at the pinned version'
+        stub_tool codex 'codex-cli 0.162.0'
+        CURL_EXIT=22
+        When run sh "$INSTALL/codex.sh"
+        The status should be failure
+        The stderr should be present
+        The result of function curl_calls should not equal 0
+    End
+
+    It 'downloads the package archive'
+        CURL_EXIT=22
+        When run sh "$INSTALL/codex.sh"
+        The status should be failure
+        The stderr should be present
+        The contents of file "$CURL_LOG" should include "codex-package-$(codex_target).tar.gz"
+    End
+End
+
 Describe 'codex.sh checks the pinned checksum'
-    # A well-formed archive holding a fake binary, so that only the checksum
+    # A well-formed package holding a fake binary, so that only the checksum
     # stands between it and ~/.local/bin.
     tampered_archive() {
-        case $(uname -m) in
-            aarch64 | arm64) target=aarch64-unknown-linux-musl ;;
-            *) target=x86_64-unknown-linux-musl ;;
-        esac
-        printf '#!/bin/sh\necho "codex-cli 0.162.0"\n' > "$TEST_HOME/codex-$target"
-        chmod +x "$TEST_HOME/codex-$target"
-        tar -czf "$CURL_BODY" -C "$TEST_HOME" "codex-$target"
+        mkdir -p "$TEST_HOME/pkg/bin"
+        printf '#!/bin/sh\necho "codex-cli 0.162.0"\n' > "$TEST_HOME/pkg/bin/codex"
+        chmod +x "$TEST_HOME/pkg/bin/codex"
+        echo '{}' > "$TEST_HOME/pkg/codex-package.json"
+        tar -czf "$CURL_BODY" -C "$TEST_HOME/pkg" .
     }
 
     It 'fails and installs nothing when the archive does not match'
@@ -178,5 +230,6 @@ Describe 'codex.sh checks the pinned checksum'
         The status should be failure
         The stderr should be present
         The path "$HOME/.local/bin/codex" should not be exist
+        The path "$HOME/.local/share/codex" should not be exist
     End
 End
