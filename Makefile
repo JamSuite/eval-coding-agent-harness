@@ -28,7 +28,7 @@ help:
 	@echo '  typecheck    tsc --noEmit'
 	@echo '  fmt-check    shfmt -d and prettier --check; non-zero if anything is unformatted'
 	@echo '  fmt          shfmt -w and prettier --write'
-	@echo '  test-ts      node --test every *.test.ts'
+	@echo '  test-ts      node --test every *.test.ts outside node_modules'
 	@echo '  test-sh      shellspec under each of: $(SHELLS)'
 	@echo '  check-beads  approved specs and task beads agree (PROMPTS.md -> Tracking)'
 
@@ -51,7 +51,7 @@ fmt:
 	$(BIN)/prettier --write --log-level warn .
 
 test-ts:
-	node --test 'scripts/**/*.test.ts'
+	node --test '**/*.test.ts'
 
 # The portability proof: the same specfiles run by each shell. A shell that is
 # missing fails the gate rather than being skipped.
