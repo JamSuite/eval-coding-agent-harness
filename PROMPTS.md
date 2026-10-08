@@ -36,11 +36,11 @@ this file before running P0.
 
 ## Status
 
-NEXT: **P0**
+NEXT: **P1**
 
 | ID       | Prompt                                    | Runs on   | Status | Date | Commit | Note |
 | -------- | ----------------------------------------- | --------- | ------ | ---- | ------ | ---- |
-| P0       | Bootstrap the repository and devcontainer | host      | todo   |      |        |      |
+| P0       | Bootstrap the repository and devcontainer | host      | done   | 2026-10-08 | 559f54e | Muse Code: Meta lists macOS/Windows only, postCreate tries and warns; agy stores creds in OS keyring, P1 must check it persists |
 | P1       | Toolchain and quality gate                | container | todo   |      |        |      |
 | P2       | Architecture docs                         | container | todo   |      |        |      |
 | P3       | Global spec and spec index                | container | todo   |      |        |      |
