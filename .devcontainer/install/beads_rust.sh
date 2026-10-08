@@ -2,9 +2,8 @@
 # shellcheck shell=sh
 #
 # Installs beads_rust (`br`), the project's only tracker, into ~/.local/bin at
-# a pinned version. postCreate.sh calls it; it can also be run by hand in a
-# running container. Idempotent: does nothing when the pinned version is
-# already installed.
+# a pinned version. Idempotent: does nothing when the pinned version is already
+# installed.
 set -eu
 
 BR_VERSION=0.7.4
@@ -25,7 +24,7 @@ case $(uname -m) in
     x86_64) arch=linux_musl_amd64 sha=$BR_SHA256_AMD64 ;;
     aarch64 | arm64) arch=linux_musl_arm64 sha=$BR_SHA256_ARM64 ;;
     *)
-        printf 'install-br.sh: no br build for %s\n' "$(uname -m)" >&2
+        printf 'beads_rust.sh: no br build for %s\n' "$(uname -m)" >&2
         exit 1
         ;;
 esac

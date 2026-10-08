@@ -14,21 +14,27 @@ Status: bootstrapping. [`PROMPTS.md`](PROMPTS.md) holds the build plan; progress
 Open this folder in VS Code and choose **Reopen in Container**. Everything installs inside the
 container. Then log in to each host:
 
-| Host            | Login                                        |
-| --------------- | -------------------------------------------- |
-| Claude Code     | `claude` then `/login`                       |
-| Codex           | `codex login`                                |
-| OpenCode        | `opencode auth login`                        |
-| Antigravity CLI | `agy` (interactive sign-in), if it installed |
-| Muse Code       | `muse login`                                 |
+| Host            | Login                       |
+| --------------- | --------------------------- |
+| Claude Code     | `claude` then `/login`      |
+| Codex           | `codex login`               |
+| OpenCode        | `opencode auth login`       |
+| Antigravity CLI | `agy` (interactive sign-in) |
+| Muse Code       | `muse login`                |
 
 Each login except Antigravity's is kept in a Docker volume scoped to this repository, so it
 survives a rebuild. For Antigravity, see Host availability.
+
+A tool fetched with curl can be reinstalled without a rebuild: run
+`sh .devcontainer/install/<tool>.sh`, where `<tool>` is `beads_rust`, `shellspec`, `antigravity`
+or `muse`. Each does nothing when its tool is already installed. Their tests run offline with
+`shellspec`.
 
 ## Host availability
 
 - **Muse Code:** Meta's product page lists macOS and Windows builds only, but the installer
   succeeds on Linux. Muse Code 1.4.4 is installed in this container.
-- **Antigravity CLI:** the installer failed in this container, so `agy` is not installed;
-  `postCreate.sh` warns and carries on. Antigravity keeps its login in the OS keyring, and the
-  container has none, so whether the login survives a rebuild is unproven until `agy` installs.
+- **Antigravity CLI:** `agy` 1.3.1 is installed in this container. Its download server sometimes
+  serves the installer gzipped without saying so; `.devcontainer/install/lib.sh` decompresses it.
+  Antigravity keeps its login in the OS keyring, and the container has none, so whether the login
+  survives a rebuild is still unproven.

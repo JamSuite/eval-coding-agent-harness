@@ -1,0 +1,4 @@
+--require spec_helper
+
+# Fail the run if a spec is empty or a Describe has no It.
+--warning-as-failure

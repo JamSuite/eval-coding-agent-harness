@@ -46,6 +46,14 @@
     "containerEnv": {
         "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
     },
+    // Set here, not in ~/.bashrc, so that make, `sh -c`, CI-style scripts and
+    // the postCreate scripts themselves find br, shellspec, agy, muse, codex
+    // and promptfoo; ~/.bashrc returns early in a non-interactive shell.
+    // remoteEnv rather than containerEnv because only remoteEnv can extend the
+    // image's PATH.
+    "remoteEnv": {
+        "PATH": "/home/vscode/.local/bin:${containerWorkspaceFolder}/node_modules/.bin:${containerEnv:PATH}"
+    },
     "postCreateCommand": "sh .devcontainer/postCreate.sh",
     "customizations": {
         "vscode": {

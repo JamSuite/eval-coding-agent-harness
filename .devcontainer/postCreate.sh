@@ -5,30 +5,9 @@
 # host gets nothing installed.
 set -eu
 
-# Pinned for reproducible rebuilds. The `.tar.gz` suffix tells the ShellSpec
-# installer to fetch the release archive rather than git-clone the repo.
-SHELLSPEC_VERSION=0.28.1.tar.gz
+# Pinned for reproducible rebuilds. Tools fetched with curl are pinned in
+# their own scripts under .devcontainer/install/.
 OPENCODE_VERSION=1.18.35
-
-# Prints a warning and carries on. Used only for hosts that may have no Linux
-# build, so that one missing host does not fail the whole container.
-warn() {
-    printf 'postCreate.sh: WARNING: %s\n' "$*" >&2
-}
-
-# Downloads an installer to a file before running it. `curl | bash` would hide
-# a failed download, because POSIX sh has no pipefail.
-run_installer() {
-    run_installer_file=$(mktemp)
-    curl -fsSL "$1" -o "$run_installer_file" || {
-        rm -f "$run_installer_file"
-        return 1
-    }
-    bash "$run_installer_file"
-    run_installer_status=$?
-    rm -f "$run_installer_file"
-    return "$run_installer_status"
-}
 
 # ---- volume ownership ----
 #
@@ -81,19 +60,21 @@ sudo rm -rf /var/lib/apt/lists/*
 # single-word command, which `shellspec --shell` needs.
 sudo ln -sf "$(command -v busybox)" /usr/local/bin/ash
 
-# ShellSpec: test runner written in POSIX sh, so one specfile runs under every
-# shell above.
-shellspec_installer=$(mktemp)
-curl -fsSL https://raw.githubusercontent.com/shellspec/shellspec/master/install.sh \
-    -o "$shellspec_installer"
-sh "$shellspec_installer" --yes -p "$HOME/.local" "$SHELLSPEC_VERSION"
-rm -f "$shellspec_installer"
-
-# ---- beads_rust (br) ----
+# ---- tools fetched with curl ----
 #
-# The project's tracker. Pinned and checksum-checked in its own script so that
-# it can also be installed into a running container without a rebuild.
-sh .devcontainer/install-br.sh
+# One script per tool, so that each can also be run by hand in a running
+# container without a rebuild. Each does nothing when its tool is already
+# installed. br and ShellSpec fail the container if they cannot install; agy
+# and muse only warn, so one missing host does not fail the whole container.
+#
+#   - shellspec    test runner written in POSIX sh, so one specfile runs under
+#                  every shell above
+#   - beads_rust   br, the project's tracker
+#   - antigravity  agy, the Antigravity CLI
+#   - muse         Muse Code
+for tool in shellspec beads_rust antigravity muse; do
+    sh ".devcontainer/install/$tool.sh"
+done
 
 # ---- project dependencies ----
 #
@@ -106,28 +87,8 @@ npm ci
 # ---- OpenCode ----
 npm install -g "opencode-ai@$OPENCODE_VERSION"
 
-# ---- Antigravity CLI ----
-# The installer writes ~/.local/bin/agy and verifies its checksum.
-run_installer https://antigravity.google/cli/install.sh \
-    || warn 'Antigravity CLI (agy) did not install; record this in README.md'
-
-# ---- Muse Code ----
-# Meta's product page lists macOS and Windows only, but the installer works on
-# Linux. It still warns rather than fails, so a broken installer cannot fail
-# the container.
-run_installer https://dev.meta.ai/install.sh \
-    || warn 'Muse Code (muse) did not install; record this in README.md'
-
 # ---- PATH ----
 #
-# Unquoted heredoc: $PWD is expanded now (postCreateCommand runs in the
-# workspace folder), while \$HOME and \$PATH stay literal and are evaluated per
-# shell. node_modules/.bin carries codex, promptfoo and prettier.
-if ! grep -q '### BEGIN devcontainer postCreate.sh' "$HOME/.bashrc"; then
-    cat >> "$HOME/.bashrc" << EOT
-
-### BEGIN devcontainer postCreate.sh
-export PATH="\$HOME/.local/bin:$PWD/node_modules/.bin:\$PATH"
-### END devcontainer postCreate.sh
-EOT
-fi
+# devcontainer.json sets PATH with remoteEnv, so that every process the
+# container starts finds ~/.local/bin and node_modules/.bin, not only an
+# interactive bash. Nothing is written to ~/.bashrc.
