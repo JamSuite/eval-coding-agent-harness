@@ -1,0 +1,39 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+# shfmt reads the three keys below, so the editor and the gate agree. They sit
+# under [*] rather than [*.sh] because executables may have no extension; other
+# tools ignore keys they do not recognise.
+#
+# switch_case_indent -- `case` bodies indented one level (shfmt -ci)
+# space_redirects    -- `>&2` keeps a space before the target (shfmt -sr)
+# binary_next_line   -- operators start the continuation line (shfmt -bn)
+switch_case_indent = true
+space_redirects = true
+binary_next_line = true
+
+[*.md]
+trim_trailing_whitespace = false
+
+[{*.yml,*.yaml}]
+indent_size = 2
+
+[Makefile]
+indent_style = tab
+
+# ShellSpec specfiles are a DSL, not shell blocks; shfmt would strip all their
+# indentation.
+[*_spec.sh]
+ignore = true
+
+# Installed dependencies ship their own shell scripts; they are not ours to
+# format.
+[node_modules/**]
+ignore = true

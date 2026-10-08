@@ -1,0 +1,20 @@
+{
+    "name": "eval-coding-agent-harness",
+    "version": "0.0.0",
+    "private": true,
+    "description": "Evaluates whether a change to a coding-agent skill changes what the agent writes, across several coding-agent hosts.",
+    "type": "module",
+    "engines": {
+        "node": ">=22.22.0"
+    },
+    "//": [
+        "The engines floor is promptfoo's. The Claude Agent SDK is pinned to the version promptfoo 0.124.1 lists.",
+        "The Codex CLI is not declared: promptfoo -> @openai/codex-sdk -> @openai/codex supplies it. See .devcontainer/postCreate.sh.",
+        "P1 adds the TypeScript toolchain, the test runner and the gate scripts."
+    ],
+    "devDependencies": {
+        "@anthropic-ai/claude-agent-sdk": "0.3.283",
+        "prettier": "3.9.9",
+        "promptfoo": "0.124.1"
+    }
+}

@@ -1,0 +1,5 @@
+{
+    // github.vscode-github-actions validates the CI workflow P1 adds; nothing
+    // else here understands workflow YAML.
+    "recommendations": ["timonwong.shellcheck", "mkhl.shfmt", "editorconfig.editorconfig", "esbenp.prettier-vscode", "github.vscode-github-actions"]
+}

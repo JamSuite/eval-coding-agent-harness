@@ -1,0 +1,31 @@
+# ---- env ----
+.env
+.env.*
+!.env.example
+
+# ---- scratch / build output ----
+/tmp/
+/out/
+/dist/
+/coverage/
+
+# ---- js ----
+node_modules/
+
+# ---- promptfoo ----
+.promptfoo/
+
+# ---- claude ----
+# .claude/settings.json may be checked in; local and session files are not.
+.claude/settings.local.json
+
+# ---- installed skills ----
+# Skills installed into a host's project-scope directory are build output. The
+# sample skill lives only under test fixtures.
+.claude/skills/
+.agents/skills/
+.codex/skills/
+.opencode/skills/
+
+# ---- os / editor ----
+.DS_Store

@@ -1,0 +1,62 @@
+{
+    "name": "eval-coding-agent-harness",
+    "image": "mcr.microsoft.com/devcontainers/base:trixie",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "remoteUser": "vscode",
+    "features": {
+        // promptfoo 0.124.1 requires Node >=22.22.0. Pinned to a major, not
+        // "lts", so a new LTS line cannot arrive with a rebuild. Re-check
+        // promptfoo's engines.node before moving it.
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "24"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        // Installs the Claude Code CLI and its VS Code extension. Codex,
+        // OpenCode, Antigravity CLI and Muse Code have no feature; postCreate.sh
+        // installs them.
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    },
+    "mounts": [
+        // One named volume per host login, so a rebuild keeps every login.
+        // ${devcontainerId} scopes each volume to this repository; no other
+        // repo's container sees these logins.
+        //
+        // Claude Code: auth, settings, history.
+        "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume",
+        // Nests inside the volume above. Docker orders mounts by destination
+        // depth, so the deeper bind wins. Suspect this line first if the
+        // container fails to start.
+        "source=${localEnv:HOME}/.claude/statusline-command.sh,target=/home/vscode/.claude/statusline-command.sh,type=bind,readonly",
+        // Codex: `codex login` writes auth.json here.
+        "source=codex-config-${devcontainerId},target=/home/vscode/.codex,type=volume",
+        // OpenCode: `opencode auth login` writes auth.json under the XDG data
+        // dir. Only the data dir is persisted; ~/.config/opencode holds ambient
+        // config that the harness must be able to exclude.
+        "source=opencode-data-${devcontainerId},target=/home/vscode/.local/share/opencode,type=volume",
+        // Antigravity CLI: config lives in ~/.gemini/antigravity-cli/.
+        // Credentials go to the OS keyring, which a container lacks; P1 checks
+        // whether the login survives a rebuild.
+        "source=antigravity-config-${devcontainerId},target=/home/vscode/.gemini,type=volume",
+        // Muse Code: `muse login` writes ~/.config/muse/auth.json.
+        "source=muse-config-${devcontainerId},target=/home/vscode/.config/muse,type=volume",
+        // The reference repository, read-only, at the path it has in its own
+        // container so that paths quoted in its docs resolve unchanged.
+        "source=${localWorkspaceFolder}/../coding-agent-skills-tdd,target=/workspaces/coding-agent-skills-tdd,type=bind,readonly"
+    ],
+    "containerEnv": {
+        "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+    },
+    "postCreateCommand": "sh .devcontainer/postCreate.sh",
+    "customizations": {
+        "vscode": {
+            // Mirrors .vscode/extensions.json, which records why each is here.
+            "extensions": [
+                "timonwong.shellcheck",
+                "mkhl.shfmt",
+                "editorconfig.editorconfig",
+                "esbenp.prettier-vscode",
+                "github.vscode-github-actions"
+            ]
+        }
+    }
+}

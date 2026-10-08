@@ -1,0 +1,63 @@
+{
+    "editor.formatOnSave": true,
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "npm.packageManager": "npm",
+    // Purple, so this window is never mistaken for the reference repo's green.
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#B9A3D6",
+        "titleBar.activeForeground": "#2A1F38",
+
+        "titleBar.inactiveBackground": "#A28AC4",
+        "titleBar.inactiveForeground": "#5A4E68",
+
+        "activityBar.background": "#B9A3D6",
+        "activityBar.foreground": "#2A1F38",
+
+        "statusBar.background": "#B9A3D6",
+        "statusBar.foreground": "#2A1F38",
+
+        "editor.background": "#FAF8FD",
+        "sideBar.background": "#F3EEF9",
+        "panel.background": "#F3EEF9"
+    },
+    "[shellscript]": {
+        "editor.defaultFormatter": "mkhl.shfmt"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+
+    // -x lets shellcheck follow `. ./lib/foo.sh` into sourced files.
+    "shellcheck.customArgs": ["-x"],
+    // ShellSpec specfiles are a DSL that shellcheck reads as undefined
+    // commands. shfmt still formats them; only linting is suppressed.
+    "shellcheck.ignorePatterns": {
+        "**/*_spec.sh": true,
+        "**/spec_helper.sh": true
+    },
+    // The specfile `ignore = true` in .editorconfig applies only when shfmt
+    // walks a directory. This extension formats through stdin, so without this
+    // format-on-save would still flatten a specfile.
+    "shfmt.formatIgnored": false,
+
+    "files.associations": {
+        ".shellspec": "shellscript"
+    },
+    "search.exclude": {
+        "**/node_modules": true
+    }
+}
