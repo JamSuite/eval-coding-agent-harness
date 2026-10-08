@@ -90,6 +90,7 @@ Describe 'install scripts skip a tool that is already present'
     Parameters
         beads_rust.sh br 'br 0.7.4'
         shellspec.sh shellspec '0.28.1'
+        codex.sh codex 'codex-cli 0.162.0'
         antigravity.sh agy 'agy 1.0.0'
         muse.sh muse 'Muse Code 1.4.4'
     End
@@ -106,6 +107,7 @@ Describe 'install scripts replace a pinned tool at another version'
     Parameters
         beads_rust.sh br 'br 0.7.3'
         shellspec.sh shellspec '0.28.0'
+        codex.sh codex 'codex-cli 0.156.1'
     End
 
     It "$1 downloads when $2 reports $3"
@@ -123,6 +125,7 @@ Describe 'a failed download'
         Parameters
             beads_rust.sh
             shellspec.sh
+            codex.sh
         End
 
         It "$1 exits non-zero"
@@ -153,5 +156,27 @@ Describe 'a failed download'
             The status should be success
             The stderr should include "WARNING"
         End
+    End
+End
+
+Describe 'codex.sh checks the pinned checksum'
+    # A well-formed archive holding a fake binary, so that only the checksum
+    # stands between it and ~/.local/bin.
+    tampered_archive() {
+        case $(uname -m) in
+            aarch64 | arm64) target=aarch64-unknown-linux-musl ;;
+            *) target=x86_64-unknown-linux-musl ;;
+        esac
+        printf '#!/bin/sh\necho "codex-cli 0.162.0"\n' > "$TEST_HOME/codex-$target"
+        chmod +x "$TEST_HOME/codex-$target"
+        tar -czf "$CURL_BODY" -C "$TEST_HOME" "codex-$target"
+    }
+
+    It 'fails and installs nothing when the archive does not match'
+        tampered_archive
+        When run sh "$INSTALL/codex.sh"
+        The status should be failure
+        The stderr should be present
+        The path "$HOME/.local/bin/codex" should not be exist
     End
 End

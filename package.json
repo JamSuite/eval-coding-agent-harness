@@ -9,7 +9,7 @@
     },
     "//": [
         "The engines floor is promptfoo's. The Claude Agent SDK is pinned to the version promptfoo 0.124.1 lists.",
-        "The Codex CLI is not declared: promptfoo -> @openai/codex-sdk -> @openai/codex supplies it. See .devcontainer/postCreate.sh.",
+        "The Codex CLI is not declared: .devcontainer/install/codex.sh installs a pinned release. promptfoo -> @openai/codex-sdk -> @openai/codex also brings an older one.",
         "P1 adds the TypeScript toolchain, the test runner and the gate scripts."
     ],
     "devDependencies": {

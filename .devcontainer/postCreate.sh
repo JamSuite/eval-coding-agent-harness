@@ -64,23 +64,26 @@ sudo ln -sf "$(command -v busybox)" /usr/local/bin/ash
 #
 # One script per tool, so that each can also be run by hand in a running
 # container without a rebuild. Each does nothing when its tool is already
-# installed. br and ShellSpec fail the container if they cannot install; agy
-# and muse only warn, so one missing host does not fail the whole container.
+# installed. br, ShellSpec and codex fail the container if they cannot
+# install; agy and muse only warn, so one missing host does not fail the whole
+# container.
 #
 #   - shellspec    test runner written in POSIX sh, so one specfile runs under
 #                  every shell above
 #   - beads_rust   br, the project's tracker
+#   - codex        the Codex CLI, newer than the one npm ci installs below
 #   - antigravity  agy, the Antigravity CLI
 #   - muse         Muse Code
-for tool in shellspec beads_rust antigravity muse; do
+for tool in shellspec beads_rust codex antigravity muse; do
     sh ".devcontainer/install/$tool.sh"
 done
 
 # ---- project dependencies ----
 #
-# promptfoo, prettier and the SDKs are pinned in package.json. The Codex CLI
-# arrives here too: promptfoo -> @openai/codex-sdk -> @openai/codex puts
-# `codex` in node_modules/.bin, the binary the openai:codex-sdk provider drives.
+# promptfoo, prettier and the SDKs are pinned in package.json. An older Codex
+# CLI arrives here too: promptfoo -> @openai/codex-sdk -> @openai/codex puts it
+# in node_modules/.bin, behind install/codex.sh's on PATH. The openai:codex-sdk
+# provider ignores PATH and drives this one unless told otherwise.
 # package-lock.json is committed, so `npm ci` installs exactly what it pins.
 npm ci
 
