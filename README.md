@@ -7,7 +7,8 @@ with its uncertainty and with the other explanations ruled out.
 Hosts: Claude Code, Codex, OpenCode, Antigravity CLI and Muse Code. Engine: promptfoo.
 
 Status: bootstrapping. [`PROMPTS.md`](PROMPTS.md) holds the build plan; progress is tracked in beads
-(`br ready --label prompt`).
+(`br ready --label prompt`). [`docs/arch/spec-process.md`](docs/arch/spec-process.md) describes a
+working session.
 
 ## Setup
 
@@ -26,9 +27,9 @@ Each login except Antigravity's is kept in a Docker volume scoped to this reposi
 survives a rebuild. For Antigravity, see Host availability.
 
 A tool fetched with curl can be reinstalled without a rebuild: run
-`sh .devcontainer/install/<tool>.sh`, where `<tool>` is `beads_rust`, `shellspec`, `antigravity`
-or `muse`. Each does nothing when its tool is already installed. Their tests run offline with
-`shellspec`.
+`sh .devcontainer/install/<tool>.sh`, where `<tool>` is `beads_rust`, `shellspec`, `codex`,
+`antigravity` or `muse`. Each does nothing when its tool is already installed. Their tests run
+offline with `shellspec`.
 
 ## Host availability
 
