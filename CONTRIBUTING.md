@@ -5,6 +5,7 @@ Thank you for considering a contribution. Bug reports, questions and pull reques
 ## Ground rules
 
 - Be respectful and professional.
+- Follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 - Give constructive feedback.
 - Keep discussions on the topic at hand.
 
