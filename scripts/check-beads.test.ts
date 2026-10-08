@@ -10,7 +10,7 @@ import { checkBeads, readIssues, readSpecs, type Issue } from "./check-beads.ts"
 const SCRIPT = join(import.meta.dirname, "check-beads.ts");
 
 function bead(title: string, status: string, labels: string[]): Issue {
-    return { id: `eh-${title.slice(0, 5)}`, title, status, labels };
+    return { id: `eh-${title.split(" ")[0] ?? ""}`, title, status, labels };
 }
 
 const specBead = (nn: string, status: string) => bead(`SPEC-${nn} — Spec: x`, status, ["prompt"]);
