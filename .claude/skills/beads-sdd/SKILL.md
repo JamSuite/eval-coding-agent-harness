@@ -42,8 +42,7 @@ IDs look like `eh-<slug>-<hash>`. Pass `--slug` so they stay readable: `p1`, `03
 br ready --label prompt --json --brief | jq -r '.[].title'
 ```
 
-Take the prompt that comes first in PROMPTS.md's "Prompts in order" table. Read its full bead
-with `br show <id>`.
+Take the one Tracking → Next names. Read its full bead with `br show <id>`.
 
 ## State
 

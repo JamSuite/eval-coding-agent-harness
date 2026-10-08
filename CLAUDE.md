@@ -31,7 +31,7 @@ beads_rust (`br`) is the only tracker; there is no status table. The rules are i
 Shared context → Tracking, and the commands for each rule are in the project skill
 `.claude/skills/beads-sdd/SKILL.md`. In short:
 
-- Next work: `br ready --label prompt`, then the prompt that comes first in PROMPTS.md's order.
+- Next work: `br ready --label prompt`; PROMPTS.md → Tracking → Next says which one to take.
 - A prompt's bead goes in progress when it starts, closed with the commit hash when done, or
   blocked with the reason.
 - An approved spec's tasks become beads labelled `spec-NN` under the BUILD-NN bead.

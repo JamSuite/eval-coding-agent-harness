@@ -1,6 +1,10 @@
 node_modules/
 package-lock.json
 
+# Written by tools, not by hand.
+.beads/
+.devcontainer/devcontainer-lock.json
+
 # Shell is formatted by shfmt, not prettier.
 *.sh
 .shellspec

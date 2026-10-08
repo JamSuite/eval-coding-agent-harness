@@ -69,9 +69,9 @@ fi
 
 # ---- shell toolchain ----
 #
-#   shellcheck            lint; `# shellcheck shell=sh` makes it flag bashisms
-#   shfmt                 formatter; reads .editorconfig
-#   dash, ksh, busybox    other shells to run the same specs under, which is
+#   - shellcheck          lint; `# shellcheck shell=sh` makes it flag bashisms
+#   - shfmt               formatter; reads .editorconfig
+#   - dash, ksh, busybox  other shells to run the same specs under, which is
 #                         what proves portability
 sudo apt-get update
 sudo apt-get install -y --no-install-recommends shellcheck shfmt dash ksh busybox
@@ -100,12 +100,8 @@ sh .devcontainer/install-br.sh
 # promptfoo, prettier and the SDKs are pinned in package.json. The Codex CLI
 # arrives here too: promptfoo -> @openai/codex-sdk -> @openai/codex puts
 # `codex` in node_modules/.bin, the binary the openai:codex-sdk provider drives.
-# `npm ci` once P1 commits a lockfile; until then, `npm install` creates it.
-if [ -f package-lock.json ]; then
-    npm ci
-else
-    npm install
-fi
+# package-lock.json is committed, so `npm ci` installs exactly what it pins.
+npm ci
 
 # ---- OpenCode ----
 npm install -g "opencode-ai@$OPENCODE_VERSION"
@@ -113,13 +109,14 @@ npm install -g "opencode-ai@$OPENCODE_VERSION"
 # ---- Antigravity CLI ----
 # The installer writes ~/.local/bin/agy and verifies its checksum.
 run_installer https://antigravity.google/cli/install.sh \
-    || warn 'Antigravity CLI (agy) did not install; record this in PROMPTS.md'
+    || warn 'Antigravity CLI (agy) did not install; record this in README.md'
 
 # ---- Muse Code ----
-# Meta's product page lists macOS and Windows only. Try anyway; a missing Linux
-# build must not fail the container.
+# Meta's product page lists macOS and Windows only, but the installer works on
+# Linux. It still warns rather than fails, so a broken installer cannot fail
+# the container.
 run_installer https://dev.meta.ai/install.sh \
-    || warn 'Muse Code (muse) did not install; record this in PROMPTS.md'
+    || warn 'Muse Code (muse) did not install; record this in README.md'
 
 # ---- PATH ----
 #

@@ -181,8 +181,8 @@ these prompts uses it; the hosts under test never see it. The project skill
 - **Prompts are beads.** Every prompt has one bead whose title starts with its prompt ID. Its
   dependencies follow the Subsystems table: BUILD-NN depends on SPEC-NN, and SPEC-NN depends on
   the BUILD beads of the subsystems it depends on.
-- **Next.** Run `br ready` and take the prompt bead with the lowest prompt ID. Run one prompt at a
-  time unless the user says otherwise.
+- **Next.** Run `br ready --label prompt` and take the ready prompt listed first in "Prompts in
+  order". Run one prompt at a time unless the user says otherwise.
 - **State.**
     - Set a bead to in progress when its prompt starts.
     - Close it with the commit hash when the prompt is done.

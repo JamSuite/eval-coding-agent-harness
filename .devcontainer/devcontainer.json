@@ -50,13 +50,7 @@
     "customizations": {
         "vscode": {
             // Mirrors .vscode/extensions.json, which records why each is here.
-            "extensions": [
-                "timonwong.shellcheck",
-                "mkhl.shfmt",
-                "editorconfig.editorconfig",
-                "esbenp.prettier-vscode",
-                "github.vscode-github-actions"
-            ]
+            "extensions": ["timonwong.shellcheck", "mkhl.shfmt", "editorconfig.editorconfig", "esbenp.prettier-vscode", "github.vscode-github-actions"]
         }
     }
 }

@@ -6,19 +6,29 @@ with its uncertainty and with the other explanations ruled out.
 
 Hosts: Claude Code, Codex, OpenCode, Antigravity CLI and Muse Code. Engine: promptfoo.
 
-Status: bootstrapping. See [`PROMPTS.md`](PROMPTS.md) for the build plan and progress.
+Status: bootstrapping. [`PROMPTS.md`](PROMPTS.md) holds the build plan; progress is tracked in beads
+(`br ready --label prompt`).
 
 ## Setup
 
 Open this folder in VS Code and choose **Reopen in Container**. Everything installs inside the
 container. Then log in to each host:
 
-| Host            | Login                                 |
-| --------------- | ------------------------------------- |
-| Claude Code     | `claude` then `/login`                |
-| Codex           | `codex login`                         |
-| OpenCode        | `opencode auth login`                 |
-| Antigravity CLI | `agy` (interactive sign-in)           |
-| Muse Code       | `muse login`, if it installed         |
+| Host            | Login                                        |
+| --------------- | -------------------------------------------- |
+| Claude Code     | `claude` then `/login`                       |
+| Codex           | `codex login`                                |
+| OpenCode        | `opencode auth login`                        |
+| Antigravity CLI | `agy` (interactive sign-in), if it installed |
+| Muse Code       | `muse login`                                 |
 
-Each login is kept in a Docker volume scoped to this repository, so it survives a rebuild.
+Each login except Antigravity's is kept in a Docker volume scoped to this repository, so it
+survives a rebuild. For Antigravity, see Host availability.
+
+## Host availability
+
+- **Muse Code:** Meta's product page lists macOS and Windows builds only, but the installer
+  succeeds on Linux. Muse Code 1.4.4 is installed in this container.
+- **Antigravity CLI:** the installer failed in this container, so `agy` is not installed;
+  `postCreate.sh` warns and carries on. Antigravity keeps its login in the OS keyring, and the
+  container has none, so whether the login survives a rebuild is unproven until `agy` installs.
