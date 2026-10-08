@@ -11,11 +11,16 @@
     "//": [
         "The engines floor is promptfoo's. The Claude Agent SDK is pinned to the version promptfoo 0.124.1 lists.",
         "The Codex CLI is not declared: .devcontainer/install/codex.sh installs a pinned release. promptfoo -> @openai/codex-sdk -> @openai/codex also brings an older one.",
-        "P1 adds the TypeScript toolchain, the test runner and the gate scripts."
+        "TypeScript runs on Node directly by type stripping; typescript is for tsc --noEmit only, and is held below 6.1 by typescript-eslint's peer range. `make check` is the gate."
     ],
     "devDependencies": {
         "@anthropic-ai/claude-agent-sdk": "0.3.283",
+        "@eslint/js": "10.0.1",
+        "@types/node": "24.19.1",
+        "eslint": "10.11.0",
         "prettier": "3.9.9",
-        "promptfoo": "0.124.1"
+        "promptfoo": "0.124.1",
+        "typescript": "6.0.3",
+        "typescript-eslint": "8.71.1"
     }
 }

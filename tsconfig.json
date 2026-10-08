@@ -1,0 +1,24 @@
+{
+    // Type-check only. Node runs the .ts sources directly by stripping types,
+    // so nothing is emitted, imports name the .ts file, and only erasable
+    // syntax is allowed (no enums, no namespaces, no parameter properties).
+    "compilerOptions": {
+        "target": "es2024",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "types": ["node"],
+        "noEmit": true,
+        "allowImportingTsExtensions": true,
+        "rewriteRelativeImportExtensions": false,
+        "erasableSyntaxOnly": true,
+        "verbatimModuleSyntax": true,
+        "strict": true,
+        "noUncheckedIndexedAccess": true,
+        "exactOptionalPropertyTypes": true,
+        "noImplicitOverride": true,
+        "noFallthroughCasesInSwitch": true,
+        "skipLibCheck": true
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules"]
+}
