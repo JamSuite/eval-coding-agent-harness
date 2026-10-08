@@ -15,13 +15,13 @@ working session.
 Open this folder in VS Code and choose **Reopen in Container**. Everything installs inside the
 container. Then log in to each host:
 
-| Host            | Login                       |
-| --------------- | --------------------------- |
-| Claude Code     | `claude` then `/login`      |
-| Codex           | `codex login`               |
-| OpenCode        | `opencode auth login`       |
-| Antigravity CLI | `agy` (interactive sign-in) |
-| Muse Code       | `muse login`                |
+| Host            | Login                           |
+| --------------- | ------------------------------- |
+| Claude Code     | `claude` then `/login`          |
+| Codex           | `codex login`                   |
+| OpenCode        | deferred; `opencode auth login` |
+| Antigravity CLI | `agy` (interactive sign-in)     |
+| Muse Code       | `muse login`                    |
 
 Each login except Antigravity's is kept in a Docker volume scoped to this repository, so it
 survives a rebuild. For Antigravity, see Host availability.
@@ -33,6 +33,8 @@ offline with `shellspec`.
 
 ## Host availability
 
+- **OpenCode:** deferred until the core harness works with Claude Code, Codex, Antigravity CLI and
+  Muse Code. It stays installed, and its login volume stays, so it can come back without a rebuild.
 - **Muse Code:** Meta's product page lists macOS and Windows builds only, but the installer
   succeeds on Linux. Muse Code 1.4.4 is installed in this container.
 - **Antigravity CLI:** `agy` 1.3.1 is installed in this container. Its download server sometimes

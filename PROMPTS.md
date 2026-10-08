@@ -122,18 +122,20 @@ a test fixture.
 A host is the coding agent that loads the skill and does the work. Each host is reached through
 one adapter. Adding a host means writing that adapter and its fixtures; no control code changes.
 
-| Order | Host            | Vendor                             | CLI        | promptfoo provider                                   | Unverified until P4                                         |
-| ----- | --------------- | ---------------------------------- | ---------- | ---------------------------------------------------- | ----------------------------------------------------------- |
-| 1     | Claude Code     | Anthropic                          | `claude`   | stock: `anthropic:claude-agent-sdk`                  | —                                                           |
-| 2     | Codex           | OpenAI                             | `codex`    | stock: `openai:codex-sdk`, `openai:codex-app-server` | Reliable single-skill exposure (ADR-0001 amendment 4)       |
-| 3     | OpenCode        | open source; runs any lab's models | `opencode` | stock: `opencode:sdk`                                | Skill exposure and ambient-config exclusion                 |
-| 4     | Antigravity CLI | Google                             | `agy`      | none; ours, shelling out to the CLI                  | Headless run, machine-readable output, isolation levers     |
-| 5     | Muse Code       | Meta                               | `muse`     | none; ours, shelling out to the CLI                  | Whether it reads `SKILL.md` at all; headless run; isolation |
+| Order | Host                | Vendor                             | CLI        | promptfoo provider                                   | Unverified until P4                                         |
+| ----- | ------------------- | ---------------------------------- | ---------- | ---------------------------------------------------- | ----------------------------------------------------------- |
+| 1     | Claude Code         | Anthropic                          | `claude`   | stock: `anthropic:claude-agent-sdk`                  | —                                                           |
+| 2     | Codex               | OpenAI                             | `codex`    | stock: `openai:codex-sdk`, `openai:codex-app-server` | Reliable single-skill exposure (ADR-0001 amendment 4)       |
+| 3     | OpenCode (deferred) | open source; runs any lab's models | `opencode` | stock: `opencode:sdk`                                | Skill exposure and ambient-config exclusion                 |
+| 4     | Antigravity CLI     | Google                             | `agy`      | none; ours, shelling out to the CLI                  | Headless run, machine-readable output, isolation levers     |
+| 5     | Muse Code           | Meta                               | `muse`     | none; ours, shelling out to the CLI                  | Whether it reads `SKILL.md` at all; headless run; isolation |
 
 - Claude Code and Codex come first: their providers ship with promptfoo and the reference repo
   already ran Claude Code.
-- OpenCode is next. It holds the host fixed while the model varies, which separates a model effect
-  from a host effect.
+- OpenCode is deferred until the core harness works with Claude Code, Codex, Antigravity CLI and
+  Muse Code. It holds the host fixed while the model varies, which separates a model effect from a
+  host effect.
+- P1 and P4 skip deferred hosts.
 - Antigravity CLI is Google's host. Gemini CLI was retired for individual accounts on 2026-06-18
   and replaced by it. It reads skills from `.agents/skills/`, as Codex does.
 - Muse Code entered beta on 2026-08-05. Build it only if P4 shows it can run a `SKILL.md`
@@ -570,6 +572,6 @@ Tracking describes.
 | 08  | analysis                       | k of n with exact bounds; differences between conditions with intervals; the comparability gate; the attrition flag; the positive-control gate; one of four verdicts (effect attributed, no effect detected, inconclusive, instrument failed)                                  | `eval/aggregate.mjs`, `eval/bounds.mjs`; design stories 2, 3, 5 and 7; `RESEARCH_PRIOR_ART_ANALYSIS.md` D1 | 01, 06     |
 | 09  | report-and-rescore             | A report produced from the records alone, which a reader can recompute. Re-score preserved artifacts whenever the scoring code changes                                                                                                                                         | `scripts/figures/01.mjs`, `scripts/check-article.mjs`; design story 8                                      | 05, 08     |
 | 10  | end-to-end                     | Run an article-1-style experiment on a sample fixture skill under Claude Code and Codex, from experiment definition to verdict. `usage.md` complete                                                                                                                            | `EVAL_HARNESS_HOWTO.md`; the old `eval/runs/` as a comparison of shape, not of results                     | 01–09      |
-| 11  | host-opencode                  | OpenCode through its stock provider. Run the end-to-end experiment on it with two models from different labs. No control code changes                                                                                                                                          | ADR-0001 amendment 4; P4's ADRs and fixtures                                                               | 10         |
+| 11  | host-opencode (deferred)       | OpenCode through its stock provider. Run the end-to-end experiment on it with two models from different labs. No control code changes                                                                                                                                          | ADR-0001 amendment 4; P4's ADRs and fixtures                                                               | 10         |
 | 12  | host-antigravity               | Antigravity CLI through our own promptfoo provider. Run the end-to-end experiment on it. No control code changes                                                                                                                                                               | P4's ADRs and fixtures; the reference `eval/provider.mjs` as the pattern of a provider that shells out     | 10         |
 | 13  | host-muse-code                 | Muse Code through our own promptfoo provider, if P4 showed it can run a `SKILL.md` headlessly. Run the end-to-end experiment on it. No control code changes                                                                                                                    | P4's ADRs and fixtures; subsystem 12's provider                                                            | 12         |

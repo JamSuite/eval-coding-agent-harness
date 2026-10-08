@@ -124,6 +124,9 @@ takes it in as task `NN.k`:
 br close <id> --reason "Became task NN.k"
 ```
 
+A harness or spec-NN bead fixed directly is closed in the same commit as the fix, with a reason and
+no hash. Only prompt and task beads need the hash and a separate close commit.
+
 ## Committing
 
 `br` writes `.beads/issues.jsonl` after every change and never runs git. Stage `.beads/` with the
