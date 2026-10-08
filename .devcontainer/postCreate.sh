@@ -5,10 +5,6 @@
 # host gets nothing installed.
 set -eu
 
-# Pinned for reproducible rebuilds. Tools fetched with curl are pinned in
-# their own scripts under .devcontainer/install/.
-OPENCODE_VERSION=1.18.35
-
 # ---- volume ownership ----
 #
 # Docker creates every named volume root-owned, and also creates any missing
@@ -46,35 +42,23 @@ if [ -f "$HOME/.claude/statusline-command.sh" ]; then
     mv "$tmp" "$settings"
 fi
 
-# ---- shell toolchain ----
+# ---- tools ----
 #
-#   - shellcheck          lint; `# shellcheck shell=sh` makes it flag bashisms
-#   - shfmt               formatter; reads .editorconfig
-#   - dash, ksh, busybox  other shells to run the same specs under, which is
-#                         what proves portability
-sudo apt-get update
-sudo apt-get install -y --no-install-recommends shellcheck shfmt dash ksh busybox
-sudo rm -rf /var/lib/apt/lists/*
-
-# busybox dispatches on argv[0]; this symlink makes its ash applet a
-# single-word command, which `shellspec --shell` needs.
-sudo ln -sf "$(command -v busybox)" /usr/local/bin/ash
-
-# ---- tools fetched with curl ----
+# One script per tool under .devcontainer/install/, so that each can also be
+# run by hand in a running container without a rebuild. Each does nothing
+# when its tool is already installed. br, ShellSpec, codex, opencode and the
+# shell toolchain fail the container if they cannot install; agy and muse only
+# warn, so one missing host does not fail the whole container.
 #
-# One script per tool, so that each can also be run by hand in a running
-# container without a rebuild. Each does nothing when its tool is already
-# installed. br, ShellSpec and codex fail the container if they cannot
-# install; agy and muse only warn, so one missing host does not fail the whole
-# container.
-#
-#   - shellspec    test runner written in POSIX sh, so one specfile runs under
-#                  every shell above
-#   - beads_rust   br, the project's tracker
-#   - codex        the Codex CLI, newer than the one npm ci installs below
-#   - antigravity  agy, the Antigravity CLI
-#   - muse         Muse Code
-for tool in shellspec beads_rust codex antigravity muse; do
+#   - shell_toolchain  shellcheck, shfmt, dash, ksh and busybox, from apt
+#   - shellspec        test runner written in POSIX sh, so one specfile runs
+#                      under every shell above
+#   - beads_rust       br, the project's tracker
+#   - codex            the Codex CLI, newer than the one npm ci installs below
+#   - opencode         OpenCode, a deferred host, from npm
+#   - antigravity      agy, the Antigravity CLI
+#   - muse             Muse Code
+for tool in shell_toolchain shellspec beads_rust codex opencode antigravity muse; do
     sh ".devcontainer/install/$tool.sh"
 done
 
@@ -86,9 +70,6 @@ done
 # provider ignores PATH and drives this one unless told otherwise.
 # package-lock.json is committed, so `npm ci` installs exactly what it pins.
 npm ci
-
-# ---- OpenCode ----
-npm install -g "opencode-ai@$OPENCODE_VERSION"
 
 # ---- PATH ----
 #

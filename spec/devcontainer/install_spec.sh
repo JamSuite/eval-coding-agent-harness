@@ -233,3 +233,99 @@ Describe 'codex.sh checks the pinned checksum'
         The path "$HOME/.local/share/codex" should not be exist
     End
 End
+
+# Puts a stub for $1 first on PATH that logs each call to $CMD_LOG and exits
+# with $2 (default 0).
+stub_command() {
+    cat > "$STUBS/$1" << STUB
+#!/bin/sh
+printf '%s\\n' "$1 \$*" >> "\$CMD_LOG"
+exit ${2:-0}
+STUB
+    chmod +x "$STUBS/$1"
+}
+
+command_calls() {
+    wc -l < "$CMD_LOG" | tr -d ' '
+}
+
+Describe 'opencode.sh'
+    setup_opencode() {
+        CMD_LOG="$TEST_HOME/cmd.log"
+        : > "$CMD_LOG"
+        export CMD_LOG
+    }
+    BeforeEach setup_opencode
+
+    It 'makes no install when the pinned opencode is present'
+        printf '#!/bin/sh\necho 1.18.35\n' > "$STUBS/opencode"
+        chmod +x "$STUBS/opencode"
+        stub_command npm
+        When run sh "$INSTALL/opencode.sh"
+        The status should be success
+        The result of function command_calls should equal 0
+    End
+
+    It 'installs the pinned version when opencode reports another'
+        printf '#!/bin/sh\necho 1.18.34\n' > "$STUBS/opencode"
+        chmod +x "$STUBS/opencode"
+        stub_command npm
+        When run sh "$INSTALL/opencode.sh"
+        The status should be success
+        The contents of file "$CMD_LOG" should include "npm install -g opencode-ai@1.18.35"
+    End
+
+    It 'fails when npm fails'
+        printf '#!/bin/sh\necho 1.18.34\n' > "$STUBS/opencode"
+        chmod +x "$STUBS/opencode"
+        stub_command npm 1
+        When run sh "$INSTALL/opencode.sh"
+        The status should be failure
+    End
+End
+
+Describe 'shell_toolchain.sh'
+    setup_toolchain() {
+        CMD_LOG="$TEST_HOME/cmd.log"
+        : > "$CMD_LOG"
+        export CMD_LOG
+        stub_command sudo
+    }
+    BeforeEach setup_toolchain
+
+    It 'makes no install when every tool is present'
+        for tool in shellcheck shfmt dash ksh busybox ash; do
+            printf '#!/bin/sh\n' > "$STUBS/$tool"
+            chmod +x "$STUBS/$tool"
+        done
+        When run sh "$INSTALL/shell_toolchain.sh"
+        The status should be success
+        The result of function command_calls should equal 0
+    End
+
+    # The container has the real tools; a PATH of stubs and a few basics hides
+    # them.
+    isolate_path() {
+        mkdir -p "$TEST_HOME/bin"
+        for cmd in sh cat wc tr rm chmod; do
+            ln -s "$(command -v "$cmd")" "$TEST_HOME/bin/$cmd"
+        done
+        PATH="$STUBS:$TEST_HOME/bin"
+    }
+
+    It 'installs with apt when a tool is missing'
+        isolate_path
+        When run sh "$INSTALL/shell_toolchain.sh"
+        The status should be success
+        The contents of file "$CMD_LOG" should include "apt-get install"
+        The contents of file "$CMD_LOG" should include "busybox"
+        The contents of file "$CMD_LOG" should include "/usr/local/bin/ash"
+    End
+
+    It 'fails when apt fails'
+        isolate_path
+        stub_command sudo 100
+        When run sh "$INSTALL/shell_toolchain.sh"
+        The status should be failure
+    End
+End

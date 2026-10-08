@@ -26,10 +26,10 @@ container. Then log in to each host:
 Each login except Antigravity's is kept in a Docker volume scoped to this repository, so it
 survives a rebuild. For Antigravity, see Host availability.
 
-A tool fetched with curl can be reinstalled without a rebuild: run
-`sh .devcontainer/install/<tool>.sh`, where `<tool>` is `beads_rust`, `shellspec`, `codex`,
-`antigravity` or `muse`. Each does nothing when its tool is already installed. Their tests run
-offline with `shellspec`.
+A tool under `.devcontainer/install/` can be reinstalled without a rebuild: run
+`sh .devcontainer/install/<tool>.sh`, where `<tool>` is `shell_toolchain`, `shellspec`,
+`beads_rust`, `codex`, `opencode`, `antigravity` or `muse`. Each does nothing when its tool is
+already installed. Their tests run offline with `shellspec`.
 
 ## Host availability
 
