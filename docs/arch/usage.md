@@ -1,5 +1,7 @@
 # Usage
 
+[⬑ Back to arch TOC](./index.md)
+
 How to run an experiment: define it, pre-register it, run it, and read the verdict. This page is a
 skeleton until the subsystems are built. Each BUILD prompt fills in its own section, and BUILD-10
 completes the page with a worked example from definition to verdict.

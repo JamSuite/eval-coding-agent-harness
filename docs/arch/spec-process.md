@@ -1,5 +1,7 @@
 # Spec process and daily routine
 
+[⬑ Back to arch TOC](./index.md)
+
 How a spec is written, reviewed and tracked to done, and what a working session looks like. The
 rules are in `PROMPTS.md` → Shared context → Tracking; the `br` commands that apply them are in
 `.claude/skills/beads-sdd/SKILL.md`.

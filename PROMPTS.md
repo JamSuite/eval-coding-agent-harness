@@ -420,7 +420,7 @@ it is tested and how it will be used.
 
 | File                | Contents                                                                                                                          |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `toc.md`            | Table of contents for `docs/`                                                                                                     |
+| `index.md`          | Table of contents for `docs/`                                                                                                     |
 | `project-layout.md` | Folders, naming, where TypeScript goes and where shell goes, and how to choose between them                                       |
 | `testing.md`        | How harness code is tested: TDD, seeded-breakage tests, fixtures, the gate. Not evals                                             |
 | `setup.md`          | Local setup: devcontainer, the login for each host, first gate run                                                                |

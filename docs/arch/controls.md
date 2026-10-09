@@ -1,5 +1,7 @@
 # Controls
 
+[⬑ Back to arch TOC](./index.md)
+
 Every [rival](glossary.md) explanation the harness rules out, and the control that rules it out.
 The agent writes a different document on every run, so two [conditions](glossary.md) always
 differ. A control removes one reason, other than the skill body, for why they differ. Each control

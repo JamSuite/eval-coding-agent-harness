@@ -1,5 +1,7 @@
 # Testing
 
+[⬑ Back to arch TOC](./index.md)
+
 How the harness's own code is tested. This is not about evaluating skills: an experiment runs a
 model and costs money, while every test here runs without a model, a login or the network, and the
 whole suite finishes in seconds.

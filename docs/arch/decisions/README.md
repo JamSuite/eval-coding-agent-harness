@@ -1,5 +1,7 @@
 # Architecture decision records
 
+[⬑ Back to arch TOC](../index.md)
+
 One file per decision that shapes the harness and would be costly to reverse:
 `NNNN-title.md`, numbered from `0001` in the order written. A record states the context, the
 decision, what was observed or measured to support it, the alternatives rejected and why, and the

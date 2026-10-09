@@ -1,5 +1,7 @@
 # Writing style
 
+[⬑ Back to arch TOC](./index.md)
+
 Every document in this repository follows these rules: the docs under `docs/`, specs, ADRs, the
 README, code comments and commit messages. Adapted from the reference repository's
 `docs/writing-style.md`, which was written for published articles.
@@ -26,6 +28,9 @@ software and TypeScript. Do not assume they know evaluation terms; link those to
   the output"; "could not read" versus "found nothing".
 - **Keep status out of docs.** Status lives in beads. A doc says what is true of the design, not
   how far the work has got.
+- **Link back to the index.** Every page under `docs/arch/` except `index.md` has
+  `[⬑ Back to arch TOC](./index.md)` on the line after its title, with the path adjusted in a
+  subfolder.
 - **Approachable tone.** An experienced engineer explaining work to another. Not formal, not
   promotional, not chatty.
 

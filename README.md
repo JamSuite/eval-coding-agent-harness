@@ -16,7 +16,7 @@ working session.
 - [`docs/arch/setup.md`](docs/arch/setup.md): open the devcontainer, log in to each host, run the
   gate.
 - [`docs/arch/usage.md`](docs/arch/usage.md): run an experiment.
-- [`docs/arch/toc.md`](docs/arch/toc.md): everything else under `docs/`.
+- [`docs/arch/index.md`](docs/arch/index.md): everything else under `docs/`.
 
 ## Quality gate
 

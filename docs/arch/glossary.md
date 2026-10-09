@@ -1,5 +1,7 @@
 # Glossary
 
+[⬑ Back to arch TOC](./index.md)
+
 The terms the harness uses, each defined once. Other documents link here instead of redefining
 them.
 

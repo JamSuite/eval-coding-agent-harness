@@ -1,5 +1,7 @@
 # Project layout
 
+[⬑ Back to arch TOC](./index.md)
+
 Where each kind of file goes, how it is named, and how to choose between TypeScript and shell.
 
 ## Folders
@@ -11,7 +13,7 @@ Where each kind of file goes, how it is named, and how to choose between TypeScr
 | `scripts/`                  | Tooling for this repository, not part of the harness, such as `scripts/check-beads.ts`                              |
 | `spec/`                     | ShellSpec specfiles, named after the script or folder each tests                                                    |
 | `fixtures/`                 | Test fixtures: sample skills, cases, recorded host output, run records ([`testing.md`](testing.md))                 |
-| `docs/arch/`                | How the project is built and used; [`toc.md`](toc.md) lists it                                                      |
+| `docs/arch/`                | How the project is built and used; [`index.md`](index.md) lists it                                                  |
 | `docs/arch/decisions/`      | Architecture decision records                                                                                       |
 | `docs/specs/`               | `00-harness/spec.md`, the global spec, and one `NN-name/spec.md` per subsystem                                      |
 | `.devcontainer/`            | The container, `postCreate.sh`, and one install script per tool under `install/`                                    |

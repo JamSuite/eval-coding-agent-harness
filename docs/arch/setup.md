@@ -1,5 +1,7 @@
 # Setup
 
+[⬑ Back to arch TOC](./index.md)
+
 How to get from a fresh clone to a passing gate. Everything runs inside the devcontainer; nothing
 is installed on the host machine.
 
